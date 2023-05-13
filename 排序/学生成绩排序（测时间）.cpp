@@ -15,9 +15,9 @@ struct student {
 	int math;
 	int eng;
 };
-const int num = 100;//取100个不同的n测试执行时间
+const int num = 5;//取100个不同的n测试执行时间
 //排序规则
-bool cmp(student s1,student s2)
+bool cmp(student s1, student s2)
 {
 	if (s1.totalscore != s2.totalscore)
 		return s1.totalscore > s2.totalscore;
@@ -34,7 +34,7 @@ int partition(student* nums, int low, int high)//把一组数由枢轴元素分成两断
 	student center = nums[i];
 	while (i < j)
 	{
-		while (i < j && cmp(nums[j],center)==0)
+		while (i < j && cmp(nums[j], center) == 0)
 		{
 			j--;
 		}
@@ -43,7 +43,7 @@ int partition(student* nums, int low, int high)//把一组数由枢轴元素分成两断
 			swap(nums[i], nums[j]);
 			i++;
 		}
-		while (i < j && cmp(center,nums[i])==0)
+		while (i < j && cmp(center, nums[i]) == 0)
 		{
 			i++;
 		}
@@ -67,8 +67,10 @@ void quicksort(student* nums, int low, int high)
 }
 int main()
 {
-		int n;
-		cin >> n;
+	int n=0;
+	for (;n<=500000;n+=10000)//对于不同的n执行num次测试排序时间
+	{
+		clock_t start, finish;
 		student* s = new student[n];
 		unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 		default_random_engine gen(seed);
@@ -77,7 +79,6 @@ int main()
 		normal_distribution<double> eng(125, 10);
 		for (int i = 0; i < n; ++i)
 		{
-			cin >> s[i].no >> s[i].name;
 			if (chn(gen) > 150)
 				s[i].chinese = 150;
 			s[i].chinese = floor(chn(gen));
@@ -89,19 +90,16 @@ int main()
 			s[i].eng = floor(eng(gen));
 			s[i].totalscore = s[i].chinese + s[i].eng + s[i].math;
 		}
-		ofstream in;
-		in.open("unsorted_data.txt", std::ios::out | std::ios::app);
-		for (int i = 0;i < n;i++)
-		{
-			in << s[i].no << " " << s[i].name << " " << s[i].totalscore << " " << s[i].chinese << " " << s[i].math << " " << s[i].eng << endl;
-		}
+		start = clock();
 		quicksort(s, 0, n - 1);
-		ofstream in2;
-		in2.open("sorted_data.txt", std::ios::out | std::ios::app);
-		for (int i = 0;i < n;i++)
-		{
-			in2 << s[i].no << " " << s[i].name << " " << s[i].totalscore << " " << s[i].chinese << " " << s[i].math << " " << s[i].eng << endl;
-		}
+		finish = clock();
+		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+		cout << "n=" << n << "时排序所用时间为：" << duration << "s\n";
+		ofstream in;
+		in.open("time_data(n很大).txt", std::ios::out | std::ios::app);
+		in << duration << " ";
+	}
+
 
 	return 0;
 }

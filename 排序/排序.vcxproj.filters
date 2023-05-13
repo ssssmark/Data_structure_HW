@@ -42,5 +42,8 @@
     <ClCompile Include="学生成绩排序.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="学生成绩排序（测时间）.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
