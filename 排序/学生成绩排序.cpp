@@ -91,6 +91,7 @@ int main()
 		}
 		ofstream in;
 		in.open("unsorted_data.txt", std::ios::out | std::ios::app);
+		in << "学号  名字  总分  语文  数学  英语" << endl;
 		for (int i = 0;i < n;i++)
 		{
 			in << s[i].no << " " << s[i].name << " " << s[i].totalscore << " " << s[i].chinese << " " << s[i].math << " " << s[i].eng << endl;
@@ -98,6 +99,7 @@ int main()
 		quicksort(s, 0, n - 1);
 		ofstream in2;
 		in2.open("sorted_data.txt", std::ios::out | std::ios::app);
+		in2 << "学号  名字  总分  语文  数学  英语" << endl;
 		for (int i = 0;i < n;i++)
 		{
 			in2 << s[i].no << " " << s[i].name << " " << s[i].totalscore << " " << s[i].chinese << " " << s[i].math << " " << s[i].eng << endl;

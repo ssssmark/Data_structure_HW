@@ -15,7 +15,6 @@ struct student {
 	int math;
 	int eng;
 };
-const int num = 5;//取100个不同的n测试执行时间
 //排序规则
 bool cmp(student s1, student s2)
 {
@@ -65,6 +64,77 @@ void quicksort(student* nums, int low, int high)
 		quicksort(nums, center + 1, high);
 	}
 }
+void HeapAdjust(student* arr, int start, int end)
+{
+	student tmp = arr[start];
+	for (int i = 2 * start + 1; i <= end; i = i * 2 + 1)
+	{
+		if (i < end && cmp(arr[i] , arr[i + 1]))//有右孩子并且左孩子小于右孩子
+		{
+			i++;
+		}//i一定是左右孩子的最大值
+		if (cmp(arr[i],tmp)==0)
+		{
+			arr[start] = arr[i];
+			start = i;
+		}
+		else
+		{
+			break;
+		}
+	}
+	arr[start] = tmp;
+}
+void HeapSort(student* arr, int len)
+{
+	//建立最大堆，从后往前依次调整
+	for (int i = (len - 1 - 1) / 2;i >= 0;i--)
+	{
+		HeapAdjust(arr, i, len - 1);
+	}
+	//每次将根和待排序的最后一次交换，然后在调整
+	student tmp;
+	for (int i = 0; i < len - 1; i++)
+	{
+		tmp = arr[0];
+		arr[0] = arr[len - 1 - i];
+		arr[len - 1 - i] = tmp;
+		HeapAdjust(arr, 0, len - 1 - i - 1);
+	}
+}
+
+void mergesort(student a[], int left, int right,student*ans)
+{
+	if (left >= right)
+		return;
+	int mid = (left + right) / 2;
+	int i = left, j = mid + 1;
+	mergesort(a, left, mid,ans);//左半部分归并排序
+	mergesort(a, mid + 1, right,ans);//右半部分归并排序
+	int k = 0;
+	while (i <= mid && j <= right)
+	{
+		if (cmp(a[i],a[j]))
+		{
+			ans[k] = a[i];
+			i++;
+			k++;
+		}
+		else
+		{
+			ans[k] = a[j];
+			j++;
+			k++;
+		}
+
+	}
+	while (i <= mid)
+		ans[k++] = a[i++];
+	while (j <= right)
+		ans[k++] = a[j++];
+	for (int i = left, j = 0;i <= right;i++, j++)
+		a[i] = ans[j];
+}
 int main()
 {
 	int n=0;
@@ -72,6 +142,7 @@ int main()
 	{
 		clock_t start, finish;
 		student* s = new student[n];
+		student* ans = new student[n];
 		unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 		default_random_engine gen(seed);
 		normal_distribution<double> chn(110, 12);
@@ -90,14 +161,28 @@ int main()
 			s[i].eng = floor(eng(gen));
 			s[i].totalscore = s[i].chinese + s[i].eng + s[i].math;
 		}
+		ofstream in;
 		start = clock();
-		quicksort(s, 0, n - 1);
+		mergesort(s, 0,n-1,ans);
 		finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "n=" << n << "时排序所用时间为：" << duration << "s\n";
-		ofstream in;
-		in.open("time_data(n很大).txt", std::ios::out | std::ios::app);
+		in.open("mergesort_time_data.txt", std::ios::out | std::ios::app);
 		in << duration << " ";
+
+		/*start = clock();
+		HeapSort(s, n);
+		finish = clock();
+		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+		in.open("heapsort_time_data.txt", std::ios::out | std::ios::app);
+		in << duration << " ";*/
+
+		/*start = clock();
+		quicksort(s, 0, n - 1);
+		finish = clock();
+		duration = (double)(finish - start) / CLOCKS_PER_SEC;
+		cout << "n=" << n << "时排序所用时间为：" << duration << "s\n";
+		in.open("quicksort_time_data.txt", std::ios::out | std::ios::app);
+		in << duration << " ";*/
 	}
 
 
