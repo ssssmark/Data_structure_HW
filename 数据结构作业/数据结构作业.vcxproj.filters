@@ -36,5 +36,8 @@
     <ClCompile Include="顺序表实现学生选课系统.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="约瑟夫环.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
